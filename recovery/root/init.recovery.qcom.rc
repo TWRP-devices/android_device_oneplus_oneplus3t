@@ -1,3 +1,13 @@
+on early-init	
+    # Tweak IO performance during boot up
+    write /sys/block/dm-0/queue/nr_requests 256
+    write /sys/block/sda/queue/nr_requests 256
+    write /sys/block/sde/queue/nr_requests 256
+
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/sda/queue/read_ahead_kb 2048
+    write /sys/block/sde/queue/read_ahead_kb 2048
+	
 # encryption support
 on init
     chmod 0660 /dev/qseecom
@@ -8,15 +18,8 @@ on init
 	write /sys/class/leds/red/trigger "battery-charging"
 	write /sys/class/leds/green/trigger "battery-full"
 
-on early-init	
-    # Tweak IO performance during boot up
-    write /sys/block/dm-0/queue/nr_requests 256
-    write /sys/block/sda/queue/nr_requests 256
-    write /sys/block/sde/queue/nr_requests 256
-    
-    write /sys/block/dm-0/queue/read_ahead_kb 2048
-    write /sys/block/sda/queue/read_ahead_kb 2048
-    write /sys/block/sde/queue/read_ahead_kb 2048
+on early-fs
+    start setup-decrypt
 
 on boot
     # Update foreground and background cpusets
@@ -30,7 +33,7 @@ on boot
 	
     # Disable hw keys
 	write /proc/s1302/virtual_key 1
-	
+
 on property:sys.boot_completed=1
     # Disable thermal bcl hotplug to switch governor
     write /sys/module/msm_thermal/core_control/enabled 0
@@ -129,7 +132,7 @@ on property:sys.boot_completed=1
 
     # Change GPU initial power level from level 5 to level 6 for power savings
     write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 7
-    
+
     # Tweak IO performance after boot complete
     write /sys/block/dm-0/queue/read_ahead_kb 512
     write /sys/block/sda/queue/read_ahead_kb 512
@@ -138,6 +141,14 @@ on property:sys.boot_completed=1
     write /sys/block/dm-0/queue/scheduler "zen"
     write /sys/block/sda/queue/scheduler "zen"
     write /sys/block/sde/queue/scheduler "zen"
+
+# use decryption libraries from /system if available
+service setup-decrypt /sbin/setup_decrypt
+    oneshot
+    disabled
+    user root
+    group root
+seclabel u:r:recovery:s0
 
 service qseecomd /sbin/qseecomd
     oneshot
