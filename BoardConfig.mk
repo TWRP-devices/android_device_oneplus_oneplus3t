@@ -32,7 +32,6 @@ TARGET_2ND_CPU_VARIANT := cortex-a53
 #TARGET_KERNEL_ARCH := arm64
 #TARGET_KERNEL_HEADER_ARCH := arm64
 #TARGET_KERNEL_CONFIG := twrp_defconfig
-#TARGET_KERNEL_DEVICE_DEFCONFIG := device_oneplus_3T
 TARGET_PREBUILT_KERNEL := $(DEVICE_TREE)/Image.gz-dtb
 
 # Boot image
@@ -83,7 +82,11 @@ TARGET_HW_DISK_ENCRYPTION := true
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # Debug flags
-#TWRP_INCLUDE_LOGCAT := true
+TWRP_INCLUDE_LOGCAT := false
+
+# Init properties from bootloader version, ex. model info
+TARGET_INIT_VENDOR_LIB := libinit_oneplus3t
+TARGET_RECOVERY_DEVICE_MODULES := libinit_oneplus3t
 
 #Extra
 TW_NO_USB_STORAGE := true
