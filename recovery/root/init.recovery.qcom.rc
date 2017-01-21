@@ -142,6 +142,12 @@ on property:sys.boot_completed=1
     write /sys/block/sda/queue/scheduler "zen"
     write /sys/block/sde/queue/scheduler "zen"
 
+on property:ro.product.device=OnePlus3
+	write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800 2:1036800"
+    write /sys/devices/system/cpu/cpu0/cpufreq/blu_active/hispeed_freq 960000
+    write /sys/devices/system/cpu/cpu2/cpufreq/blu_active/hispeed_freq 1228800
+    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
+
 # use decryption libraries from /system if available
 service setup-decrypt /sbin/setup_decrypt
     oneshot
