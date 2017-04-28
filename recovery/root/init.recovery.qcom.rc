@@ -4,11 +4,6 @@ on early-init
     write /sys/block/dm-1/queue/read_ahead_kb 2048
     write /sys/block/sda/queue/read_ahead_kb 2048
     write /sys/block/sde/queue/read_ahead_kb 2048
-
-    write /sys/block/dm-0/queue/nr_requests 256
-    write /sys/block/dm-1/queue/nr_requests 256
-    write /sys/block/sda/queue/nr_requests 256
-    write /sys/block/sde/queue/nr_requests 256
 	
 # encryption support
 on init
@@ -137,6 +132,11 @@ on property:sys.boot_completed=1
     write /sys/block/dm-1/queue/read_ahead_kb 512
     write /sys/block/sda/queue/read_ahead_kb 512
     write /sys/block/sde/queue/read_ahead_kb 512
+
+	write /sys/block/dm-0/queue/rq_affinity 0
+	write /sys/block/dm-1/queue/rq_affinity 0
+    write /sys/block/sda/queue/rq_affinity 0
+    write /sys/block/sde/queue/rq_affinity 0
 
 on property:ro.product.device=OnePlus3
 	write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800 2:1036800"
