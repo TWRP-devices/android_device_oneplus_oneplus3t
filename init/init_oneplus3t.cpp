@@ -35,7 +35,9 @@
 
 void vendor_load_properties()
 {
-	switch (stoi(property_get("ro.boot.rf_version"))) {
+	int rf_version = stoi(property_get("ro.boot.rf_version"));
+
+	switch (rf_version) {
 	/* OnePlus 3 */
 	case 11: /* China */
 	case 31: /* Americas */
